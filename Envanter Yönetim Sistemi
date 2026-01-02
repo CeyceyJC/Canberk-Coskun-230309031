@@ -1,5 +1,11 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+public interface Storable {
+    String toCSVRow();
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 public class Supplier {
 
     private String supplierId;
@@ -65,6 +71,27 @@ public abstract class Product {
         }
         return false;
     }
+
+    public String stockWarning() {
+        if (quantity < 5) return "!!! KRITIK STOK (5'ten az) !!!";
+        if (quantity < 10) return "!! AZ STOK (10'dan az) !!";
+        return "";
+    }
+
+    @Override
+    public String toString() {
+        String exp = getExpiryDate();
+        String expText = exp.equals("") ? "" : (" | SKT: " + exp);
+        String warn = stockWarning();
+        String warnText = warn.equals("") ? "" : (" | " + warn);
+
+        return getId() + " (" + getTypeCode() + ") - " + getName()
+                + " | Fiyat: " + getUnitPrice()
+                + " | Adet: " + getQuantity()
+                + expText
+                + warnText;
+    }
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
