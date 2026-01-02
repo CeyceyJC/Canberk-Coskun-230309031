@@ -1,10 +1,12 @@
 Class:
 1- Supplier
 2- Product
-3- PerishableProduct
-4- Order
-5- Inventory
-6- Stock Manager
-7- Main
+3- NormalProduct ---- YENİ
+4- PerishableProduct
+5- Order
+6- Inventory
+7- Employee --------- YENİ
+7- StockManager
+8- Main
 
 İnterface:
