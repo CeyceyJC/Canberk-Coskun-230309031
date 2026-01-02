@@ -1,3 +1,5 @@
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 public class Supplier {
 
     private String supplierId;
@@ -25,4 +27,41 @@ public class Supplier {
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+public abstract class Product {
+    private String id;
+    private String name;
+    private double unitPrice;
+    private int quantity;
+
+    public Product(String id, String name, double unitPrice, int quantity) {
+        this.id = id;
+        this.name = name;
+        this.unitPrice = unitPrice;
+        this.quantity = quantity;
+    }
+
+    public abstract String getTypeCode();
+    public String getExpiryDate() { return ""; }
+
+    public String getId() { return id; }
+    public String getName() { return name; }
+    public double getUnitPrice() { return unitPrice; }
+    public int getQuantity() { return quantity; }
+
+    public void setName(String name) { this.name = name; }
+    public void setUnitPrice(double unitPrice) { this.unitPrice = unitPrice; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
+
+    public void addStock(int amount) {
+        quantity += amount;
+    }
+
+    public boolean reduceStock(int amount) {
+        if (quantity >= amount) {
+            quantity -= amount;
+            return true;
+        }
+        return false;
+    }
