@@ -87,3 +87,30 @@ public class NormalProduct extends Product {
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+public class PerishableProduct extends Product {
+    private String expiryDate;
+
+    public PerishableProduct(String id, String name, double unitPrice, int quantity, String expiryDate) {
+        super(id, name, unitPrice, quantity);
+        this.expiryDate = expiryDate;
+    }
+
+    @Override
+    public String getTypeCode() {
+        return "PP";
+    }
+
+    @Override
+    public String getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(String expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    @Override
+    public String toCSVRow() {
+        return getId() + "," + getTypeCode() + "," + getName() + "," + getUnitPrice() + "," + getQuantity() + "," + expiryDate;
+    }
+}
