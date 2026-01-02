@@ -65,3 +65,25 @@ public abstract class Product {
         }
         return false;
     }
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+public class NormalProduct extends Product {
+
+    public NormalProduct(String id, String name, double unitPrice, int quantity) {
+        super(id, name, unitPrice, quantity);
+    }
+
+    @Override
+    public String getTypeCode() {
+        return "NP";
+    }
+
+    @Override
+    public String toCSVRow() {
+        return getId() + "," + getTypeCode() + "," + getName() + "," + getUnitPrice() + "," + getQuantity() + ",";
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
