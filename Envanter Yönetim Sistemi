@@ -347,3 +347,132 @@ public class Employee {
         }
     }
 }
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class StockManager extends Employee {
+    private ArrayList<Supplier> suppliers = new ArrayList<>();
+
+    public StockManager(String username, String password) {
+        super(username, password);
+    }
+
+    public void ensureSuppliersFile(String fileName) {
+        try {
+            File f = new File(fileName);
+            if (!f.exists()) {
+                FileWriter w = new FileWriter(fileName);
+                w.write("id,name,phone\n");
+                w.close();
+            }
+        } catch (IOException e) {
+            System.out.println("suppliers.csv olusturulamadi!");
+        }
+    }
+
+    public void loadSuppliers(String fileName) {
+        File f = new File(fileName);
+        if (!f.exists()) return;
+
+        try {
+            Scanner reader = new Scanner(f);
+            if (reader.hasNextLine()) reader.nextLine(); // header
+
+            while (reader.hasNextLine()) {
+                String line = reader.nextLine();
+                if (line.trim().equals("")) continue;
+                String[] p = line.split(",");
+                suppliers.add(new Supplier(p[0], p[1], p[2]));
+            }
+            reader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("suppliers.csv bulunamadi!");
+        }
+    }
+
+    public void saveSuppliers(String fileName) {
+        try {
+            FileWriter w = new FileWriter(fileName, false);
+            w.write("id,name,phone\n");
+            for (Supplier s : suppliers) {
+                w.write(s.toCSVRow() + "\n");
+            }
+            w.close();
+        } catch (IOException e) {
+            System.out.println("Suppliers kaydedilemedi!");
+        }
+    }
+
+    private Supplier findSupplierById(String id) {
+        for (Supplier s : suppliers) {
+            if (s.getId().equalsIgnoreCase(id)) return s;
+        }
+        return null;
+    }
+
+    public void ensureOrdersFile(String fileName) {
+        try {
+            File f = new File(fileName);
+            if (!f.exists()) {
+                FileWriter w = new FileWriter(fileName);
+                w.write("date,type,productId,name,quantity,unitPrice,total,supplier\n");
+                w.close();
+            }
+        } catch (IOException e) {
+            System.out.println("orders.csv olusturulamadi!");
+        }
+    }
+
+    public void appendOrder(String fileName, Order o) {
+        try {
+            FileWriter w = new FileWriter(fileName, true);
+            w.write(o.toCSVRow() + "\n");
+            w.close();
+        } catch (IOException e) {
+            System.out.println("Fiş dosyasina yazilamadi!");
+        }
+    }
+
+    public void viewReceiptsByDate(String ordersFile, Scanner input) {
+        System.out.print("Tarih gir (YYYY-MM-DD): ");
+        String date = input.nextLine();
+
+        try {
+            Scanner reader = new Scanner(new File(ordersFile));
+            if (reader.hasNextLine()) reader.nextLine(); // header
+
+            System.out.println("\n=== " + date + " TARIHLI FISLER ===");
+            boolean found = false;
+
+            while (reader.hasNextLine()) {
+                String line = reader.nextLine();
+                if (line.trim().equals("")) continue;
+
+                String[] p = line.split(",");
+                if (p[0].equals(date)) {
+                    found = true;
+                    System.out.println(line);
+                }
+            }
+
+            if (!found) System.out.println("Bu tarihte fis bulunamadi.");
+
+            reader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("orders.csv bulunamadi!");
+        }
+    }
+
+.
+.
+.
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
