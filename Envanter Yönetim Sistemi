@@ -306,3 +306,44 @@ public class Inventory {
         }
     }
 }
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+import java.util.Scanner;
+
+public class Employee {
+    protected String username;
+    private String password;
+
+    public Employee(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public boolean login(Scanner input) {
+        System.out.print("Kullanici adi: ");
+        String u = input.nextLine();
+        System.out.print("Sifre: ");
+        String p = input.nextLine();
+
+        if (u.equals(username) && p.equals(password)) {
+            System.out.println("Giris basarili.\n");
+            return true;
+        } else {
+            System.out.println("Hatali giris!\n");
+            return false;
+        }
+    }
+
+    public void searchProduct(Inventory inventory, Scanner input) {
+        System.out.print("Aranacak urun ID: ");
+        String id = input.nextLine();
+
+        Product p = inventory.findById(id);
+        if (p == null) {
+            System.out.println("Urun bulunamadi!");
+        } else {
+            System.out.println("Bulunan urun: " + p);
+        }
+    }
+}
