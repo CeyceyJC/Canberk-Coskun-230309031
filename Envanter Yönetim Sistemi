@@ -141,3 +141,49 @@ public class PerishableProduct extends Product {
         return getId() + "," + getTypeCode() + "," + getName() + "," + getUnitPrice() + "," + getQuantity() + "," + expiryDate;
     }
 }
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+public class Order {
+    private String date;
+    private String type;
+    private String productId;
+    private String productName;
+    private int quantity;
+    private double unitPrice;
+    private double total;
+    private String supplierName;
+
+    public Order(String date, String type, String productId, String productName,
+                 int quantity, double unitPrice, String supplierName) {
+        this.date = date;
+        this.type = type;
+        this.productId = productId;
+        this.productName = productName;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.total = quantity * unitPrice;
+        this.supplierName = supplierName;
+    }
+
+    public String getDate() { return date; }
+    public String toCSVRow() {
+        return date + "," + type + "," + productId + "," + productName + "," + quantity + "," + unitPrice + "," + total + "," + supplierName;
+    }
+
+    public void printReceipt() {
+        System.out.println("\n==============================");
+        System.out.println(type.equals("BUY") ? "         ALIS FISI" : "         SATIS FISI");
+        System.out.println("------------------------------");
+        System.out.println("Tarih       : " + date);
+        System.out.println("Urun ID     : " + productId);
+        System.out.println("Urun Adi    : " + productName);
+        System.out.println("Adet        : " + quantity);
+        System.out.println("Birim Fiyat : " + unitPrice);
+        System.out.println("Toplam      : " + total);
+        System.out.println("Tedarikci   : " + supplierName);
+        System.out.println("==============================\n");
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
