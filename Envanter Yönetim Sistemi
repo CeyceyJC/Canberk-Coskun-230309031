@@ -617,3 +617,52 @@ public class StockManager extends Employee {
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        String INVENTORY_FILE = "inventory.csv";
+        String SUPPLIERS_FILE = "suppliers.csv";
+        String ORDERS_FILE = "orders.csv";
+
+        Inventory inventory = new Inventory();
+        inventory.ensureInventoryFile(INVENTORY_FILE);
+        inventory.loadFromCSV(INVENTORY_FILE);
+
+        Employee emp = new Employee("employee", "0000");
+        StockManager manager = new StockManager("manager", "1234");
+
+        manager.ensureSuppliersFile(SUPPLIERS_FILE);
+        manager.loadSuppliers(SUPPLIERS_FILE);
+
+        manager.ensureOrdersFile(ORDERS_FILE);
+
+        System.out.println("===== ENVANTER SISTEMI =====");
+        System.out.println("1- Employee Giris");
+        System.out.println("2- StockManager Giris");
+        System.out.print("Secim: ");
+        int role = input.nextInt();
+        input.nextLine();
+
+        boolean loggedIn = false;
+
+        if (role == 1) loggedIn = emp.login(input);
+        else if (role == 2) loggedIn = manager.login(input);
+        else {
+            System.out.println("Gecersiz secim!");
+            input.close();
+            return;
+        }
+
+        if (!loggedIn) {
+            input.close();
+            return;
+        }
+
+        int secim;
+
+.
+.
+.
