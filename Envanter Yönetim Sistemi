@@ -471,8 +471,149 @@ public class StockManager extends Employee {
         }
     }
 
-.
-.
-.
+    public void buyProduct(Inventory inventory, Scanner input, String ordersFile, String inventoryFile, String suppliersFile) {
+        System.out.println("\n--- URUN ALIS (STOK ARTIRMA) ---");
+
+        System.out.print("Urun tipi (1-NP / 2-PP): ");
+        int t = input.nextInt();
+        input.nextLine();
+
+        System.out.print("Urun ID (NP........ / PP........): ");
+        String id = input.nextLine();
+
+        // basit prefix kontrol
+        if (t == 1 && !id.startsWith("NP")) {
+            System.out.println("Hata: Normal urun ID 'NP' ile baslamali!");
+            return;
+        }
+        if (t == 2 && !id.startsWith("PP")) {
+            System.out.println("Hata: Perishable urun ID 'PP' ile baslamali!");
+            return;
+        }
+
+        System.out.print("Urun adi: ");
+        String name = input.nextLine();
+
+        System.out.print("Birim fiyat: ");
+        double price = input.nextDouble();
+
+        System.out.print("Alinan adet: ");
+        int qty = input.nextInt();
+        input.nextLine();
+
+        String expiry = "";
+        if (t == 2) {
+            System.out.println("SKT sec (1-30 gun sonra otomatik / 2-manuel gir): ");
+            int sktChoice = input.nextInt();
+            input.nextLine();
+
+            if (sktChoice == 1) {
+                expiry = LocalDate.now().plusDays(30).toString();
+            } else {
+                System.out.print("Yil: ");
+                int y = input.nextInt();
+                System.out.print("Ay: ");
+                int m = input.nextInt();
+                System.out.print("Gun: ");
+                int d = input.nextInt();
+                input.nextLine();
+                expiry = LocalDate.of(y, m, d).toString();
+            }
+        }
+
+        System.out.print("Tedarikci ID: ");
+        String supId = input.nextLine();
+
+        Supplier sup = findSupplierById(supId);
+        if (sup == null) {
+            System.out.println("Tedarikci bulunamadi. Yeni tedarikci ekleyelim.");
+            System.out.print("Tedarikci adi: ");
+            String supName = input.nextLine();
+            System.out.print("Telefon: ");
+            String phone = input.nextLine();
+
+            sup = new Supplier(supId, supName, phone);
+            suppliers.add(sup);
+            saveSuppliers(suppliersFile);
+        }
+
+        Product p;
+        if (t == 2) p = new PerishableProduct(id, name, price, qty, expiry);
+        else p = new NormalProduct(id, name, price, qty);
+
+        inventory.addOrUpdate(p);
+        inventory.saveToCSV(inventoryFile);
+
+        String date = LocalDate.now().toString();
+        Order o = new Order(date, "BUY", id, name, qty, price, sup.getName());
+        o.printReceipt();
+        appendOrder(ordersFile, o);
+
+        Product updated = inventory.findById(id);
+        if (updated != null && !updated.stockWarning().equals("")) {
+            System.out.println("UYARI: " + updated.stockWarning());
+        }
+    }
+
+    public void sellProduct(Inventory inventory, Scanner input, String ordersFile, String inventoryFile) {
+        System.out.println("\n--- URUN SATIS (STOK AZALTMA) ---");
+
+        System.out.print("Urun ID: ");
+        String id = input.nextLine();
+
+        Product p = inventory.findById(id);
+        if (p == null) {
+            System.out.println("Urun bulunamadi!");
+            return;
+        }
+
+        System.out.print("Satilan adet: ");
+        int qty = input.nextInt();
+        input.nextLine();
+
+        boolean ok = inventory.sell(id, qty);
+        if (!ok) {
+            System.out.println("Yetersiz stok!");
+            return;
+        }
+
+        inventory.saveToCSV(inventoryFile);
+
+        String date = LocalDate.now().toString();
+        Order o = new Order(date, "SELL", p.getId(), p.getName(), qty, p.getUnitPrice(), "N/A");
+        o.printReceipt();
+        appendOrder(ordersFile, o);
+
+        Product updated = inventory.findById(id);
+        if (updated != null && !updated.stockWarning().equals("")) {
+            System.out.println("UYARI: " + updated.stockWarning());
+        }
+    }
+
+    public void updateStock(Inventory inventory, Scanner input, String inventoryFile) {
+        System.out.println("\n--- STOK GUNCELLE ---");
+        System.out.print("Urun ID: ");
+        String id = input.nextLine();
+
+        System.out.print("Yeni stok adedi: ");
+        int newQty = input.nextInt();
+        input.nextLine();
+
+        boolean ok = inventory.updateStock(id, newQty);
+        if (!ok) {
+            System.out.println("Urun bulunamadi!");
+            return;
+        }
+
+        inventory.saveToCSV(inventoryFile);
+
+        Product updated = inventory.findById(id);
+        if (updated != null && !updated.stockWarning().equals("")) {
+            System.out.println("UYARI: " + updated.stockWarning());
+        }
+        System.out.println("Stok guncellendi.");
+    }
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
