@@ -792,3 +792,56 @@ public abstract class Product {
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+public class NormalProduct extends Product {
+
+	public NormalProduct(int productID, int uniqueID, float price) {
+		super(productID, uniqueID, price);
+	}
+
+	@Override
+	public boolean isPerishable() {
+		return false;
+	}
+
+	@Override
+	public boolean isExpired(int deadlineDay) throws ExpirationException {
+		return false;
+	}
+	
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+import java.time.LocalDate;
+
+public class PerishableProduct extends Product{
+	
+	private LocalDate expirationDate;
+	public PerishableProduct(int productID, int uniqueID, float price, LocalDate expirationDate) {
+		super(productID, uniqueID, price);
+		this.expirationDate = expirationDate;
+	}
+	
+	@Override
+	public boolean isPerishable() {
+		return true;
+	}
+
+	@Override
+	public boolean isExpired(int deadlineDay) throws ExpirationException{
+		int DDay = expirationDate.compareTo(LocalDate.now());
+		if (DDay <= deadlineDay) {
+			throw new ExpirationException();
+		}
+		if (DDay < 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
