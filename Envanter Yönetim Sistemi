@@ -7,31 +7,48 @@ public interface Storable {
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 public class Supplier {
-
-    private String supplierId;
+    private String id;
     private String name;
-    private String email;
     private String phone;
 
-    public Supplier(String supplierId, String name, String email, String phone) {
-        this.supplierId = supplierId;
+    public Supplier(String id, String name, String phone) {
+        this.id = id;
         this.name = name;
-        this.email = email;
         this.phone = phone;
     }
 
-    public String getSupplierId() {
-        return supplierId;
+    public String getid() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
+    public void getPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setId(String id) {
+        this.id = id; }
+
     public void setName(String name) {
-        this.name = name;
+        this.name = name; }
+
+    public void setPhone(String phone) {
+        this.phone = phone; }
+}
+
+    public String toCSVRow() {
+        return mail + "," + name + "," + phone;
+    }
+
+    @Override
+    public String toString() {
+        return mail + " - " + name + " (" + phone + ")";
     }
 }
+
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -413,7 +430,7 @@ public class StockManager extends Employee {
 
     private Supplier findSupplierById(String id) {
         for (Supplier s : suppliers) {
-            if (s.getId().equalsIgnoreCase(id)) return s;
+            if (s.getMail().equalsIgnoreCase(id)) return s;
         }
         return null;
     }
