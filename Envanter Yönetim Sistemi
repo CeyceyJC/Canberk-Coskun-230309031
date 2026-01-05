@@ -1,4 +1,4 @@
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//--PROTOTİP-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 public interface Storable {
     String toCSVRow();
@@ -748,3 +748,47 @@ if (role == 1) {
         input.close();
     }
 }
+
+//--DÜZENLENMİŞ--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+public abstract class Product {
+	private int productID;
+	private int uniqueID;
+	private float price;
+	
+	
+	public Product(int productID, int uniqueID, float price) {
+		this.productID = productID;
+		this.uniqueID = uniqueID;
+		this.price = price;
+	}
+	
+	public int getProductID() {
+		return productID;
+	}
+	
+	public void setProductID(int productID) {
+		this.productID = productID;
+	}
+	
+	public int getUniqueID() {
+		return uniqueID;
+	}
+	
+	public void setUniqueID(int uniqueID) {
+		this.uniqueID = uniqueID;
+	}
+	
+	public float getPrice() {
+		return price;
+	}
+	
+	public void setPrice(float price) {
+		this.price = price;
+	}
+	
+	public abstract boolean isPerishable();
+	public abstract boolean isExpired(int deadlineDay) throws ExpirationException;
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
