@@ -845,3 +845,47 @@ public class PerishableProduct extends Product{
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+import java.util.ArrayList;
+
+public class Inventory {
+	private int deadlineDay;
+	private ArrayList<ArrayList<Product>> inventory;
+	
+	public Inventory(int deadlineDay, int productTypeCount) {
+		this.deadlineDay = deadlineDay;
+		inventory = new ArrayList<ArrayList<Product>>(productTypeCount);
+	}
+	public int getDeadlineDay() {
+		return deadlineDay;
+	}
+	public void setDeadlineDay(int deadlineDay) {
+		this.deadlineDay = deadlineDay;
+	}
+	public ArrayList<ArrayList<Product>> getInventory() {
+		return inventory;
+	}
+	public void setInventory(ArrayList<ArrayList<Product>> inventory) {
+		this.inventory = inventory;
+	}
+	public void removeProduct(Product product) {
+		inventory.get(product.getProductID()).set(product.getProductID(), null);
+	}
+	public void addProduct (Product product) {
+		int i;
+		for(i=0; inventory.get(product.getProductID()).get(i) != null; i++) {
+			continue;
+		}
+		product.setUniqueID(i);
+		inventory.get(product.getProductID()).set(i, product);
+	}
+	public int getQuantity(int productID) {
+		int quantity = 0;
+		for (int i=0; i< inventory.get(productID).size(); i++) {
+			if (inventory.get(productID).get(i) != null) {
+				quantity++;
+			}
+		}
+		return quantity;
+	}
+}
