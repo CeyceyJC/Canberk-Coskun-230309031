@@ -7,18 +7,18 @@ public interface Storable {
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 public class Supplier {
-    private String id;
+    private String mail;
     private String name;
     private String phone;
 
     public Supplier(String id, String name, String phone) {
-        this.id = id;
+        this.id = mail;
         this.name = name;
         this.phone = phone;
     }
 
     public String getid() {
-        return id;
+        return mail;
     }
 
     public String getName() {
@@ -30,7 +30,7 @@ public class Supplier {
     }
 
     public void setId(String id) {
-        this.id = id; }
+        this.id = mail; }
 
     public void setName(String name) {
         this.name = name; }
