@@ -636,25 +636,18 @@ public class StockManager extends Employee {
 
 import java.util.Scanner;
 
-public class Main {
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+public class InventoryApp {
+    private final Scanner input = new Scanner(System.in);
+    private final String INVENTORY_FILE = "inventory.csv";
+    private final String SUPPLIERS_FILE = "suppliers.csv";
+    private final String ORDERS_FILE = "orders.csv";
 
-        String INVENTORY_FILE = "inventory.csv";
-        String SUPPLIERS_FILE = "suppliers.csv";
-        String ORDERS_FILE = "orders.csv";
+    private final Inventory inventory = new Inventory();
+    private final Employee employee = new Employee("employee", "0000");
+    private final StockManager manager = new StockManager("manager", "1234");
 
-        Inventory inventory = new Inventory();
-        inventory.ensureInventoryFile(INVENTORY_FILE);
-        inventory.loadFromCSV(INVENTORY_FILE);
-
-        Employee emp = new Employee("employee", "0000");
-        StockManager manager = new StockManager("manager", "1234");
-
-        manager.ensureSuppliersFile(SUPPLIERS_FILE);
-        manager.loadSuppliers(SUPPLIERS_FILE);
-
-        manager.ensureOrdersFile(ORDERS_FILE);
+    public void run() {
+        prepareFiles();
 
         System.out.println("===== ENVANTER SISTEMI =====");
         System.out.println("1- Employee Giris");
@@ -663,89 +656,83 @@ public class Main {
         int role = input.nextInt();
         input.nextLine();
 
-        boolean loggedIn = false;
-
-        if (role == 1) loggedIn = emp.login(input);
-        else if (role == 2) loggedIn = manager.login(input);
-        else {
-            System.out.println("Gecersiz secim!");
-            input.close();
-            return;
-        }
+        boolean loggedIn = switch (role) {
+            case 1 -> employee.login(input);
+            case 2 -> manager.login(input);
+            default -> false;
+        };
 
         if (!loggedIn) {
-            input.close();
+            System.out.println("Giris basarisiz. Programdan cikiliyor.");
             return;
         }
 
-        int secim;
-
-if (role == 1) {
-            do {
-                System.out.println("\n--- EMPLOYEE MENU ---");
-                System.out.println("1- Urun Ara (ID)");
-                System.out.println("2- Cikis");
-                System.out.print("Secim: ");
-                secim = input.nextInt();
-                input.nextLine();
-
-                switch (secim) {
-                    case 1:
-                        emp.searchProduct(inventory, input);
-                        break;
-                    case 2:
-                        System.out.println("Cikis yapiliyor...");
-                        break;
-                    default:
-                        System.out.println("Gecersiz secim!");
-                }
-            } while (secim != 2);
-        }
-
-        else {
-            do {
-                System.out.println("\n--- STOCK MANAGER MENU ---");
-                System.out.println("1- Envanter Listele");
-                System.out.println("2- Urun Ara (ID)");
-                System.out.println("3- Urun Al (Alis Fisi + CSV)");
-                System.out.println("4- Urun Sat (Satis Fisi + CSV)");
-                System.out.println("5- Stok Guncelle");
-                System.out.println("6- Fisleri Tarihe Gore Goruntule");
-                System.out.println("7- Cikis");
-                System.out.print("Secim: ");
-                secim = input.nextInt();
-                input.nextLine();
-
-                switch (secim) {
-                    case 1:
-                        inventory.printInventory();
-                        break;
-                    case 2:
-                        manager.searchProduct(inventory, input);
-                        break;
-                    case 3:
-                        manager.buyProduct(inventory, input, ORDERS_FILE, INVENTORY_FILE, SUPPLIERS_FILE);
-                        break;
-                    case 4:
-                        manager.sellProduct(inventory, input, ORDERS_FILE, INVENTORY_FILE);
-                        break;
-                    case 5:
-                        manager.updateStock(inventory, input, INVENTORY_FILE);
-                        break;
-                    case 6:
-                        manager.viewReceiptsByDate(ORDERS_FILE, input);
-                        break;
-                    case 7:
-                        System.out.println("Cikis yapiliyor...");
-                        break;
-                    default:
-                        System.out.println("Gecersiz secim!");
-                }
-
-            } while (secim != 7);
-        }
+        if (role == 1) employeeMenu();
+        else managerMenu();
 
         input.close();
+    }
+
+    private void prepareFiles() {
+        inventory.ensureInventoryFile(INVENTORY_FILE);
+        inventory.loadFromCSV(INVENTORY_FILE);
+        manager.ensureSuppliersFile(SUPPLIERS_FILE);
+        manager.loadSuppliers(SUPPLIERS_FILE);
+        manager.ensureOrdersFile(ORDERS_FILE);
+    }
+
+    private void employeeMenu() {
+        int secim;
+        do {
+            System.out.println("\n--- EMPLOYEE MENU ---");
+            System.out.println("1- Urun Ara (ID)");
+            System.out.println("2- Cikis");
+            System.out.print("Secim: ");
+            secim = input.nextInt();
+            input.nextLine();
+
+            switch (secim) {
+                case 1 -> employee.searchProduct(inventory, input);
+                case 2 -> System.out.println("Cikis yapiliyor...");
+                default -> System.out.println("Gecersiz secim!");
+            }
+        } while (secim != 2);
+    }
+
+    private void managerMenu() {
+        int secim;
+        do {
+            System.out.println("\n--- STOCK MANAGER MENU ---");
+            System.out.println("1- Envanter Listele");
+            System.out.println("2- Urun Ara (ID)");
+            System.out.println("3- Urun Al (Alis Fisi + CSV)");
+            System.out.println("4- Urun Sat (Satis Fisi + CSV)");
+            System.out.println("5- Stok Guncelle");
+            System.out.println("6- Fisleri Tarihe Gore Goruntule");
+            System.out.println("7- Cikis");
+            System.out.print("Secim: ");
+            secim = input.nextInt();
+            input.nextLine();
+
+            switch (secim) {
+                case 1 -> inventory.printInventory();
+                case 2 -> manager.searchProduct(inventory, input);
+                case 3 -> manager.buyProduct(inventory, input, ORDERS_FILE, INVENTORY_FILE, SUPPLIERS_FILE);
+                case 4 -> manager.sellProduct(inventory, input, ORDERS_FILE, INVENTORY_FILE);
+                case 5 -> manager.updateStock(inventory, input, INVENTORY_FILE);
+                case 6 -> manager.viewReceiptsByDate(ORDERS_FILE, input);
+                case 7 -> System.out.println("Cikis yapiliyor...");
+                default -> System.out.println("Gecersiz secim!");
+            }
+        } while (secim != 7);
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+public class Main {
+    public static void main(String[] args) {
+        new InventoryApp().run();
     }
 }
 
