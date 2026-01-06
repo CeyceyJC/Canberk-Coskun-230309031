@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-PROTOTİP:
+PROTOTİP: AKTİF
 Class:
 1- Supplier
 2- Product -> Abstract class
@@ -10,18 +10,23 @@ Class:
 6- Inventory
 7- Employee
 7- StockManager
-8- Main
+8- InventoryApp
+9- Main
 
 İnterface:
 1-storable
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-DÜZENLENMİŞ:
+DÜZENLENMİŞ: YAPIM AŞAMASINDA
 Class:
 1- Product -> Abstract Class
 2- NormalProduct
 3- PerishableProduct
-4- Inventory
-5- Order
-6- Supplier
+4- ProductFactory
+5- Inventory
+6- Order
+7- Supplier
+8- Company
+9- Buyer
+10-ExpirationException
