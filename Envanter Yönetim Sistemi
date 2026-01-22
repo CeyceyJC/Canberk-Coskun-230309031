@@ -338,8 +338,12 @@ public class Employee {
     }
 
     public boolean login(Scanner input) {
+        System.out.println("|Proje sebepli kopya = Eleman girisli kullanici adi: employee  |");
+        System.out.println("|Proje sebepli kopya = Manager girisli kullanici adi: manager  |");
         System.out.print("Kullanici adi: ");
         String u = input.nextLine();
+        System.out.println("|Proje sebepli kopya = Eleman girisli kullanıcı sifresi: 0000  |");
+        System.out.println("|Proje sebepli kopya = Manager girisli kullanici sifresi: 1234 |");
         System.out.print("Sifre: ");
         String p = input.nextLine();
 
@@ -352,6 +356,7 @@ public class Employee {
         }
     }
 
+    // Employee sadece arama yapabilir
     public void searchProduct(Inventory inventory, Scanner input) {
         System.out.print("Aranacak urun ID: ");
         String id = input.nextLine();
